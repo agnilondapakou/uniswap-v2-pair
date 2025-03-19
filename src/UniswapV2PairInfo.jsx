@@ -39,6 +39,7 @@ const UniswapV2PairInfo = () => {
       );
 
       const pairContract = new ethers.Contract(pairAddress, PAIR_ABI, provider);
+      
       const calls = [
         { target: pairAddress, callData: pairContract.interface.encodeFunctionData("token0") },
         { target: pairAddress, callData: pairContract.interface.encodeFunctionData("token1") },
@@ -47,6 +48,7 @@ const UniswapV2PairInfo = () => {
       ];
 
       const [, returnData] = await multicall.aggregate(calls);
+
       const token0Address = abiCoder.decode(["address"], returnData[0])[0];
       const token1Address = abiCoder.decode(["address"], returnData[1])[0];
       const reserves = abiCoder.decode(["uint112", "uint112", "uint32"], returnData[2]);
